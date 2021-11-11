@@ -1,5 +1,8 @@
 package com.qa.testdrivendevelopment;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class Questions {
 
 	/**
@@ -28,7 +31,14 @@ public class Questions {
 	 * multChar("Hi-There") → "HHHiii---TTThhheeerrreee"
 	 */
 	public String multiChar(String input) {
-		return "";
+		String output = "";
+		for (int i = 0; i < input.length(); i++) {
+			char c = input.charAt(i);
+			for (int j = 0; j < 3; j++) {
+				output += c;
+			}
+		}
+		return output;
 	}
 
 	/**
@@ -45,7 +55,16 @@ public class Questions {
 	 */
 
 	public String sandwichFilling(String sandwich) {
-		return "";
+		String sandLower = sandwich.toLowerCase();                                // breadclivebread
+		String afterFirst = sandLower.substring(sandLower.indexOf("bread") + 5);  // clivebread
+		if (afterFirst.indexOf("bread") == -1) return "";                         // kick out if only one bread
+		String filling = afterFirst.substring(0, afterFirst.indexOf("bread"));    // clive
+		
+		String gnillif = "";
+		for (int i = filling.length() - 1; i >= 0; i--) {
+			gnillif += filling.charAt(i);
+		}
+		return gnillif;
 	}
 
 	/**
@@ -61,7 +80,9 @@ public class Questions {
 	 * evenlySpaced(4, 60, 9) → false
 	 */
 	public boolean evenlySpaced(int a, int b, int c) {
-		return false;
+		int[] arr = {a, b, c};
+		Arrays.sort(arr);
+		return arr[2] - arr[1] == arr[1] - arr[0];
 	}
 
 	/**
@@ -76,7 +97,8 @@ public class Questions {
 	 * nMid("Chocolate", 1) → "Choclate"<br>
 	 */
 	public String nMid(String input, int n) {
-    	return "";
+		int chunkLength = (input.length() - n) / 2;
+		return input.substring(0, chunkLength) + input.substring(chunkLength + n);
 	}
 
 	/**
@@ -91,8 +113,12 @@ public class Questions {
 	 * endsJava("javaiscool") → false <br>
 	 * endsJava("pythoniscool") → false <br>
 	 */
+	
 	public boolean endsJava(String input) {
-    	return false;
+		return input
+				.toLowerCase()
+				.substring(input.length() - 4)
+				.equals("java");
 	}
 
 	/**
@@ -107,7 +133,21 @@ public class Questions {
 	 * HINT: "a" == "a" if false HINT: "a".equals("a") is true
 	 */
 	public int superBlock(String input) {
-    	return -1;
+		String inPad = input + " ";
+		char prevChar = '\u0000';
+		int blockSize = 0;
+		int maxBlockSize = 0;
+		
+		for (int i=0; i<inPad.length(); i++) {
+			if (inPad.charAt(i) != prevChar || i == inPad.length() - 1) {
+				maxBlockSize = blockSize > maxBlockSize ? blockSize : maxBlockSize;
+				blockSize = 1;
+			} else {
+				blockSize++;
+			}
+			prevChar = inPad.charAt(i);
+		}
+		return maxBlockSize;
 	}
 
 	/**
@@ -123,7 +163,7 @@ public class Questions {
 	 * HINT: String.toLowerCase
 	 */
 	public int amISearch(String sentence) {
-    	return -1;
+		return (" " + sentence.toLowerCase() + " ").split(" am ").length - 1;
 	}
 
 	/**
@@ -138,9 +178,12 @@ public class Questions {
 	 * fizzBuzz(8) → null
 	 */
 	public String fizzBuzz(int number) {
-    	return "";
+		String output = "";
+		output += number % 3 == 0 ? "fizz" : "";
+		output += number % 5 == 0 ? "buzz" : "";
+		return output.isEmpty() ? null : output;
 	}
-
+	
 	/**
 	 * Given a string, split the string into the individual numbers present then add
 	 * each digit of each number to get a final value for each number <br>
@@ -160,9 +203,12 @@ public class Questions {
 	 * <br>
 	 * HINT: Integer.parseInt
 	 */
-
+	
 	public int largest(String input) {
-    	return -1;
+		return Arrays.stream(input.split(" "))
+			.map(digitList -> Arrays.stream(digitList.split(""))
+				.collect(Collectors.summingInt(i -> Integer.parseInt(i))))
+			.reduce(0, (a, b) -> a > b ? a : b);
 	}
 
 	/**
@@ -179,6 +225,6 @@ public class Questions {
 	 * HINT: String.charAt
 	 */
 	public boolean compares(String word, int index, char letter) {
-    	return false;
+		return index <= word.length() && word.toLowerCase().charAt(index-1) == letter;
 	}
 }
