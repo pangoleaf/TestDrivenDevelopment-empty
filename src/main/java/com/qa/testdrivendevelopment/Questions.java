@@ -186,7 +186,7 @@ public class Questions {
 	 */
 	
 	public int amISearch(String sentence) {
-		return (" " + sentence.toLowerCase() + " ").split(" am ").length - 1;
+		return (" " + sentence.toLowerCase().replace("[^a-zA-Z]", " ") + " ").split(" am ").length - 1;
 	}
 
 	/**
@@ -230,9 +230,7 @@ public class Questions {
 
 	// NEW & IMPROVED, OLD IS BELOW
 	public int largest(String input) {
-		return Arrays.stream(input.split(" "))
-				.mapToInt(digits -> digits.chars().map(Character::getNumericValue).sum())
-				.max().getAsInt();
+		return Arrays.stream(input.split(" ")).mapToInt(digits -> digits.chars().map(Character::getNumericValue).sum()).max().getAsInt();
 	}
 
 //	// OLD
